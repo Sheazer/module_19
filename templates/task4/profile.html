@@ -1,0 +1,24 @@
+{% extends "task4/base.html" %}
+
+
+{% block pagename %}
+    <h1>Профиль</h1>
+{% endblock %}
+
+{% block nav %}
+    {{ block.super }}
+{% endblock %}
+
+{% block main %}
+    <h1>{{head}}</h1>
+    <ul>
+        <li><h2>Имя: {{name}}</h2></li>
+        <li><h2>Возраст: {{age}}</h2></li>
+        <li><h2>Баланс: {{balance}} $</h2></li>
+    </ul>
+{% endblock %}%}
+
+{% block footer %}
+    {{ block.super }}
+{% endblock %}
+

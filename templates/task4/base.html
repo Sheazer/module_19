@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <header>
+        {% block pagename %}
+            <h1>Главная страница</h1>
+        {% endblock %}
+    </header>
+    <nav>
+        {% block nav %}
+            <h3><a href="/">Главная</a></h3>
+            <h3><a href="/courses">Игры</a></h3>
+            <h3><a href="/profile">Мой профиль</a></h3>
+        {% endblock %}
+    </nav>
+    <main>
+        {% block main %}
+            <p>Тут ничего нет!</p>
+        {% endblock %}
+    </main>
+    <footer>
+        {% block footer %}
+            <a href="/"><button >{{home}}</button></a>
+        {% endblock %}
+    </footer>
+</body>
+</html>

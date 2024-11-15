@@ -1,0 +1,23 @@
+{% extends "task4/base.html" %}
+
+{% block pagename %}
+    <h1>Игры</h1>
+{% endblock %}
+
+{% block nav %}
+    {{ block.super }}
+{% endblock %}
+
+{% block main %}
+    <h1>{{head}}</h1>
+    <ul>
+        {% for game in games %}
+            <li>{{game.title}} | {{ game.description }}. Стоимость: {{ game.cost }} <button>Купить</button></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+{% endblock %}
+
