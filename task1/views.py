@@ -1,16 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .forms import UserRegister
+from .forms import UserRegister, CustomLoginForm
 from .models import *
 
 
 def sign_up_by_django(request):
-    users = Buyer.objects.all()
-    buyer = []
-    for user in users:
-        buyer.append(user.name)
-        print(user.name)
-    print(buyer)
     info = {}
     if request.method == 'POST':
         form = UserRegister(request.POST)
@@ -25,19 +19,54 @@ def sign_up_by_django(request):
             elif int(info['age']) < 18:
                 info['error'] = 'Вы должны быть старше 18!'
                 return render(request, 'task1/registration_page.html', {'form': form, 'info': info})
-            elif info['name'] in buyer:
+            elif Buyer.objects.filter(name=info['name']).exists():
                 info['error'] = 'Такой пользователь существует!'
                 return render(request, 'task1/registration_page.html', {'form': form, 'info': info})
             else:
                 info['error'] = 'Success'
-                Buyer.objects.create(name=info['name'], balance=1000, age=info['age'])
-                return render(request, 'task1/registration_page.html', {'form': form, 'info': info, 'username': info['name']})
+                Buyer.objects.create(name=info['name'], balance=1000, age=info['age'], password=info['password'])
+                return render(request, 'task1/registration_page.html',
+                              {'form': form, 'info': info, 'username': info['name']})
     else:
         form = UserRegister()
         info['error'] = 'Empty'
         print('Failed==============================>')
     return render(request, 'task1/registration_page.html', {'form': form, 'info': info})
 
+
+def login(request):
+    if request.method == 'POST':
+        form = CustomLoginForm(request.POST)
+        if form.is_valid():
+            try:
+                # Ищем пользователя по имени
+                user = Buyer.objects.get(name=form.cleaned_data['username'])
+            except Buyer.DoesNotExist:
+                # Если пользователь не найден
+                return render(request, 'task1/login.html', {
+                    'form': form,
+                    'info': 'Такого пользователя нет!',
+                    'check': False,
+                })
+
+            # Проверяем пароль
+            if form.cleaned_data['password'] == user.password:
+                return render(request, 'task1/login.html', {
+                    'form': form,
+                    'info': f'Добро пожаловать, {form.cleaned_data["username"]}!',
+                    'check': True,
+                })
+            else:
+                # Неверный пароль
+                return render(request, 'task1/login.html', {
+                    'form': form,
+                    'info': 'Неверный пароль!',
+                    'check': True,
+                })
+    else:
+        form = CustomLoginForm()
+
+    return render(request, 'task1/login.html', {'form': form, 'check': False})
 
 def main_template(request):
     title = 'Учебный портал'
@@ -87,5 +116,3 @@ def profile(request):
     }
 
     return render(request, 'task4/profile.html', context)
-
-
