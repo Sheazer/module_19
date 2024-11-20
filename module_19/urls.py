@@ -16,9 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.contrib.auth import views as auth_views
 
 from task1.views import *
+from posts.views import post_list
 
 
 urlpatterns = [
@@ -28,4 +28,5 @@ urlpatterns = [
     path('courses/', courses),
     path('profile/', profile),
     path('login/', login),
+    path('posts/', post_list)
 ]
